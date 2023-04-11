@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <time.h>
+
+typedef enum {
+    GREEN,
+    YELLOW,
+    RED
+} State;
+
+State state = GREEN;
+time_t start_time;
+
+void transition() {
+    time_t current_time = time(NULL);
+    double elapsed_time = difftime(current_time, start_time);
+
+    switch (state) {
+        case GREEN:
+            if (elapsed_time >= 360) {
+                state = YELLOW;
+                printf("State transition: GREEN -> YELLOW\n");
+                start_time = current_time;
+            }
+            break;
+        case YELLOW:
+            if (elapsed_time >= 10) {
+                state = RED;
+                printf("State transition: YELLOW -> RED\n");
+                start_time = current_time;
+            }
+            break;
+        case RED:
+            if (elapsed_time >= 120) {
+                state = GREEN;
+                printf("State transition: RED -> GREEN\n");
+                start_time = current_time;
+            }
+            break;
+    }
+}
+
+int main() {
+    start_time = time(NULL);
+
+    while (1) {
+        printf("Current state: ");
+        switch (state) {
+            case GREEN:
+                printf("GREEN\n");
+                break;
+            case YELLOW:
+                printf("YELLOW\n");
+                break;
+            case RED:
+                printf("RED\n");
+                break;
+        }
+
+        transition();
+    }
+
+    return 0;
+}
